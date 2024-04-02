@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 
-def sample_verb_book(end_idx, num):
+def sample_verb_book(start_idx, end_idx, num):
     # 替换这里的'your_file.csv'为你的CSV文件路径
     csv_file = '/remote-home/xujunhao/en_ai_learn/words/verb_book_v0.csv'
     # 替换这里的a为你给定的数字
@@ -11,7 +11,7 @@ def sample_verb_book(end_idx, num):
     df = pd.read_csv(csv_file)
 
     # 检查a是否足够大
-    if a < 20:
+    if a < 1:
         print("给定的数字太小，无法从中抽取20行。")
         return None
     else:
@@ -19,7 +19,7 @@ def sample_verb_book(end_idx, num):
         a = min(a, len(df))
 
         # 从第0行到第a行抽取数据
-        subset = df.iloc[0:a]
+        subset = df.iloc[start_idx:a]
 
         # 从这些行中随机选择20行
         selected_rows = subset.sample(n=num, random_state=1)
@@ -47,12 +47,13 @@ def sample_enhancement(num):
     lines = random.sample(lines, num)
     return lines
 
-# words_verb_book = sample_verb_book(0,0)
-# enhancement = sample_enhancement(0)
-other_words = sample_other_words(20)
-result_list = other_words
+words_verb_book = sample_verb_book(start_idx=0, end_idx=259,num=20)
+enhancement = sample_enhancement(5)
+other_words = sample_other_words(5)
+result_list = other_words+enhancement+words_verb_book
+# result_list = enhancement
 
-output = "姐, 快来康康今天的单词, 看看你忘了多少 (不会的标记一下, 然后再去查查):\n"
+output = "康康今天的单词, 看看你忘了多少 (不会的标记一下, 然后再去查查):\n"
 for idx, w in enumerate(result_list):
     output += f"{idx+1}. {w}\n"
 
